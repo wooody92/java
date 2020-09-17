@@ -1,4 +1,4 @@
-package dev.effective.java.chapter1.test;
+package dev.effective.java.chapter1.item1;
 
 class TestImplementsClass implements TestInterface {
 

@@ -1,4 +1,4 @@
-package dev.effective.java.chapter1;
+package dev.effective.java.chapter1.item1;
 
 import lombok.Builder;
 import lombok.Getter;
