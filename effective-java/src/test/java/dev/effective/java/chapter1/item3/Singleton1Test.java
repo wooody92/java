@@ -20,6 +20,6 @@ class Singleton1Test {
         constructor.setAccessible(true);
         Singleton1 singleton3 = constructor.newInstance();
 
-        assertEquals(singleton2, singleton3);
+        assertEquals(singleton1, singleton2);
     }
 }
