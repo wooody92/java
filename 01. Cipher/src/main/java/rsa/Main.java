@@ -6,6 +6,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.RSAPrivateKeySpec;
 import java.security.spec.RSAPublicKeySpec;
+import java.util.Base64;
 
 public class Main {
 
@@ -16,19 +17,20 @@ public class Main {
     PublicKey publicKey = keyPair.getPublic();
     PrivateKey privateKey = keyPair.getPrivate();
 
-    System.out.println("public key : " + publicKey);
-    System.out.println("private key : " + privateKey);
-
-    // key spec
-    printKeySpec(publicKey, privateKey);
+    // encoded key string
+    String publicKeyStr = Base64.getEncoder().encodeToString(publicKey.getEncoded());
+    String privateKeyStr = Base64.getEncoder().encodeToString(privateKey.getEncoded());
+    System.out.println("public key : " + publicKeyStr);
+    System.out.println("private key : " + privateKeyStr);
 
     // encrypt
-    byte[] encryptedData = RSAUtil.encrypt(publicKey, "Henry");
-    System.out.println("encryptedData : " + new String(encryptedData));
+    String encryptedData = RSAUtil.encrypt(publicKey, "Henry");
+    System.out.println("encryptedData : " + encryptedData);
 
     // decrypt
-    byte[] decryptedData = RSAUtil.decrypt(privateKey, encryptedData);
-    System.out.println("decryptedData : " + new String(decryptedData));
+    PrivateKey decodedPrivateKey = RSAUtil.getPrivateKey(privateKeyStr);
+    String decryptedData = RSAUtil.decrypt(decodedPrivateKey, encryptedData);
+    System.out.println("decryptedData : " + decryptedData);
   }
 
   private static void printKeySpec(PublicKey publicKey, PrivateKey privateKey) throws Exception {
