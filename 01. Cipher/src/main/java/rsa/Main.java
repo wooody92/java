@@ -1,11 +1,8 @@
 package rsa;
 
-import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.security.spec.RSAPrivateKeySpec;
-import java.security.spec.RSAPublicKeySpec;
 import java.util.Base64;
 
 public class Main {
@@ -23,22 +20,15 @@ public class Main {
     System.out.println("public key : " + publicKeyStr);
     System.out.println("private key : " + privateKeyStr);
 
+    // init
+    String inputData = "0000";
+
     // encrypt
-    String encryptedData = RSAUtil.encrypt(publicKey, "Henry");
+    String encryptedData = RSAUtil.encrypt(publicKey, inputData);
     System.out.println("encryptedData : " + encryptedData);
 
     // decrypt
-    PrivateKey decodedPrivateKey = RSAUtil.getPrivateKey(privateKeyStr);
-    String decryptedData = RSAUtil.decrypt(decodedPrivateKey, encryptedData);
+    String decryptedData = RSAUtil.decrypt(privateKey, encryptedData);
     System.out.println("decryptedData : " + decryptedData);
-  }
-
-  private static void printKeySpec(PublicKey publicKey, PrivateKey privateKey) throws Exception {
-    KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-    RSAPublicKeySpec publicKeySpec = keyFactory.getKeySpec(publicKey, RSAPublicKeySpec.class);
-    RSAPrivateKeySpec privateKeySpec = keyFactory.getKeySpec(privateKey, RSAPrivateKeySpec.class);
-
-    System.out.println("public key spec : " + publicKeySpec);
-    System.out.println("private key spec : " + privateKeySpec);
   }
 }
