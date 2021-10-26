@@ -1,5 +1,9 @@
 package rsa;
 
+import java.nio.charset.StandardCharsets;
+import java.security.interfaces.RSAPrivateCrtKey;
+import java.security.spec.RSAPublicKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import javax.crypto.Cipher;
 
 import java.security.KeyFactory;
@@ -38,11 +42,23 @@ public class RSAUtil {
     return new String(decryptedData);
   }
 
-  public static PrivateKey getPrivateKey(String privateKeyStr) throws Exception {
+  public static PrivateKey keyStrToPrivateKey(String privateKeyStr) throws Exception {
     byte[] decodedPrivateKeyStr = Base64.getDecoder().decode(privateKeyStr);
-    PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(decodedPrivateKeyStr);
 
-    return KeyFactory.getInstance("RSA")
-        .generatePrivate(pkcs8EncodedKeySpec);
+    return KeyFactory.getInstance("RSA").generatePrivate(new PKCS8EncodedKeySpec(decodedPrivateKeyStr));
+  }
+
+  public static PublicKey keyStrToPublicKey(String publicKeyStr) throws Exception {
+    byte[] decodedPublicKeyStr = Base64.getDecoder().decode(publicKeyStr.getBytes(StandardCharsets.UTF_8));
+
+    return KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(decodedPublicKeyStr));
+  }
+
+  /* find public key using private key */
+  public static PublicKey extractPublicKey(PrivateKey privateKey) throws Exception {
+    RSAPrivateCrtKey rsaPrivateCrtKey = (RSAPrivateCrtKey) privateKey;
+    RSAPublicKeySpec rsaPublicKeySpec = new RSAPublicKeySpec(rsaPrivateCrtKey.getModulus(), rsaPrivateCrtKey.getPublicExponent());
+
+    return KeyFactory.getInstance("RSA").generatePublic(rsaPublicKeySpec);
   }
 }
